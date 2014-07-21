@@ -18,6 +18,8 @@ Extract all contents of the Zip Archive into a folder of your choice, then launc
 	- [CTRL + S] Stop Track
 	- [CTRL + N] Previous Track / Restart Track
 	- [CTRL + M] Next Track
+	- [CTRL + T] Change timer mode (Version 0.3.0 or Newer)
 
+	
 ###Additional Software Used
 Track metadata is extracted using [TagLib#](https://github.com/mono/taglib-sharp)
