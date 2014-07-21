@@ -12,7 +12,7 @@ C# Music Player utilising the Windows Media Player API. Listen to a compatible m
 ###Getting Started
 Extract all contents of the Zip Archive into a folder of your choice, then launch the executable.
 
-###Controls (Version 0.1.2 or Newer)
+###Controls (Version 0.2.1 or Newer)
 	- [CTRL + L] Open File
 	- [CTRL + P] Play/Pause Track
 	- [CTRL + S] Stop Track
