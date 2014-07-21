@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeatNix V0.3.0", "BeatNix V0.2.1\BeatNix V0.3.0.csproj", "{2BB4EE35-68CA-40E6-BA0D-E48B56E3B8B3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BeatNix V0.3.0", "src\BeatNix V0.3.0.csproj", "{2BB4EE35-68CA-40E6-BA0D-E48B56E3B8B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,253 @@
+﻿<Window x:Class="BeatNix.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:self="clr-namespace:BeatNix"
+        Title="BeatNix Music Player V0.3.0" MinHeight="390" MinWidth="750" Height="385" Width="385" Background="WhiteSmoke">
+    
+    <!-- Player Commands -->
+    <Window.CommandBindings>
+        <CommandBinding Command="self:BeatNixCommands.LoadTrack" CanExecute="Load_CanExecute" Executed="Load_Executed" />
+        
+        <CommandBinding Command="self:BeatNixCommands.PlayTrack" CanExecute="Play_CanExecute" Executed="Play_Executed" />
+        <CommandBinding Command="self:BeatNixCommands.StopTrack" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />
+        
+        <CommandBinding Command="self:BeatNixCommands.PrevTrack" CanExecute="Prev_CanExecute" Executed="Prev_Executed" />
+        <CommandBinding Command="self:BeatNixCommands.NextTrack" CanExecute="Next_CanExecute" Executed="Next_Executed" />
+
+        <CommandBinding Command="self:BeatNixCommands.TimerToggle" CanExecute="Time_CanExecute" Executed="Time_Executed" />
+    </Window.CommandBindings>
+
+    <!-- Player Styles -->
+    <Window.Resources>       
+        <Style TargetType="ListBoxItem">
+            <Setter Property="Margin" Value="2" />
+            <Setter Property="FontFamily" Value="Calibri Light, Arial" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        
+        <Style TargetType="Label">
+            <Setter Property="IsEnabled" Value="False" />
+            <Setter Property="FontFamily" Value="Hemi Head, Calibri, Arial" />
+            
+            <Setter Property="FontSize" Value="20.66" />
+            <Setter Property="FontWeight" Value="DemiBold" />
+            <Setter Property="FontStyle" Value="Italic" /> 
+        </Style>
+        
+        <Style x:Key="StatusItem" TargetType="TextBlock">           
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontFamily" Value="Calibri Light, Arial" />
+            <Setter Property="FontSize" Value="11" />
+
+            <Setter Property="Padding" Value="10,0,10,0" />
+        </Style>
+
+        <Style x:Key="StatusTimer" TargetType="TextBlock">
+            <Setter Property="Opacity" Value="0" />
+            
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="FontFamily" Value="Calibri Light, Arial" />
+            <Setter Property="FontSize" Value="11" />
+
+            <Setter Property="Padding" Value="10,0,10,0" />
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=detailsEnabled, Path=IsChecked}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Duration="0:0:0.450" Storyboard.TargetProperty="Opacity" To="1" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Duration="0:0:0.150" Storyboard.TargetProperty="Opacity" To="0" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Opacity" Value="0" />
+            
+            <Setter Property="FontFamily" Value="Calibri Light, Arial" />
+            <Setter Property="FontSize" Value="15.92" />
+            
+            <Setter Property="TextTrimming" Value="CharacterEllipsis" />
+            <Setter Property="Padding" Value="7,0,7,0" />
+            <Setter Property="TextAlignment" Value="Left" />
+            
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding ElementName=detailsEnabled, Path=IsChecked}" Value="True">
+                    <DataTrigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Duration="0:0:0.450" Storyboard.TargetProperty="Opacity" To="1" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.EnterActions>
+
+                    <DataTrigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Duration="0:0:0.150" Storyboard.TargetProperty="Opacity" To="0" />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </DataTrigger.ExitActions>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <Style TargetType="CheckBox">
+
+            <Setter Property="FontFamily" Value="Calibri Light, Arial" />
+            <Setter Property="FontSize" Value="11" />
+
+            <Setter Property="Padding" Value="7,0,7,0" />
+        </Style>
+        
+        <Style TargetType="Slider"></Style>
+    </Window.Resources>
+    
+    <!-- Section Definitions -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="500" Width="500*" />
+            <ColumnDefinition MinWidth="200" Width="200*" />
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition MinHeight="275" Height="275*" />
+            <RowDefinition MaxHeight="25" Height="25*" />
+            <RowDefinition MaxHeight="35" Height="35*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Currently Playing -->
+        <CheckBox Content="CheckBox" Height="16" HorizontalAlignment="Right" Margin="0,10,3,0" Name="detailsEnabled" VerticalAlignment="Top" Visibility="Hidden" /> <!-- For Fading Animation-->
+        <Image Name="albumArtImage" Width="128" Height="128" Margin="10,10,10,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="Images/Placeholder.png" />
+
+        <Label Content="Title" Height="Auto" HorizontalAlignment="Left" Margin="140,10,0,0" Name="titleLabel" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="140,35,0,0" Name="titleTextBlock" VerticalAlignment="Top" MinWidth="377">
+            Track Title
+        </TextBlock>
+
+        <Label Content="Artist" Height="Auto" HorizontalAlignment="Left" Margin="140,55,0,0" Name="artistLabel" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="140,80,0,0" Name="artistTextBlock" VerticalAlignment="Top" MinWidth="377">
+            Track Aritst
+        </TextBlock>
+
+        <Label Content="Album" Height="Auto" HorizontalAlignment="Left" Margin="140,100,0,0" Name="albumLabel" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="140,125,0,0" Name="albumTextBlock" VerticalAlignment="Top" MinWidth="377">
+            Track Album
+        </TextBlock>
+
+        <Label Content="Year" Height="Auto" HorizontalAlignment="Left" Margin="5,145,0,95" Name="yearLabel" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="5,170,0,85" Name="yearTextBlock" VerticalAlignment="Top" MinWidth="10">
+            2014
+        </TextBlock>
+
+        <Label Content="Bitrate" Height="Auto" HorizontalAlignment="Center" Margin="-160,145,0,95" Name="bitrateLabel" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Center" Margin="-170,170,0,85" Name="bitrateTextBlock" VerticalAlignment="Top" MinWidth="10">
+            192kbps
+        </TextBlock>
+
+        <Label Content="Format" Height="Auto" HorizontalAlignment="Right" Margin="0,145,165,95" Name="formatLabel" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Right" Margin="0,170,40,0" Name="formatTextBlock" VerticalAlignment="Top" 
+                   MinWidth="210" MaxWidth="250">
+            Vorbis Verson 0 Audio
+        </TextBlock>
+
+        <Label Content="File Location" Height="Auto" HorizontalAlignment="Left" Margin="5,190,0,50" Name="locationLabel" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="4,215,3,5" Name="locationTextBlock" VerticalAlignment="Stretch" 
+                   MinWidth="377" TextWrapping="Wrap">
+            Track Location
+        </TextBlock>
+
+        <!-- Preloaded Tracklist -->
+        <CheckBox Content="Auto Play" Grid.Column="1" Height="16" HorizontalAlignment="Left" Margin="10,20,0,0" Name="autoCheckBox" VerticalAlignment="Top" />
+        
+        <Button Grid.Column="1" Height="23" Width="23" HorizontalAlignment="Right" VerticalAlignment="Top" 
+                Margin="0,10,10,0" Name="BrowseButton" Command="self:BeatNixCommands.LoadTrack">
+            ...
+        </Button>
+
+        <Separator Grid.Column="1" Height="Auto" MaxHeight="1" HorizontalAlignment="Stretch" Margin="10,45,10,0" Name="trackSeparator" VerticalAlignment="Top" 
+                   Width="Auto" MinWidth="190" />
+
+        <ListBox Grid.Column="1" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top" 
+                 Margin="10,47.5,10,0" Name="TrackListBox" MinHeight="220" MinWidth="190"
+                 Background="WhiteSmoke" BorderThickness="0" />
+        
+        <!-- Track Slider -->
+        <Slider Name="TrackSlider" Grid.Row="1" Grid.ColumnSpan="2" Height="20" MinWidth="10" Margin="10,0,10,0"
+                VerticalAlignment="Bottom" IsEnabled="False" Minimum="0" PreviewMouseLeftButtonUp="seekTrack" PreviewMouseLeftButtonDown="updateSeekingStatus" />
+        
+        <!-- Repeat Checkbox -->
+        <CheckBox Content="Repeat Track" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="10,0,0,5" Name="RepeatCheckBox" VerticalAlignment="Bottom" Checked="updateRepeatStatus" Unchecked="updateRepeatStatus" />
+
+        <!-- Media Buttons -->
+        <Button Command="self:BeatNixCommands.PrevTrack" Grid.Row="2" Height="23" HorizontalAlignment="Center" Margin="-160,0,0,5" 
+                Name="PrevButton" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
+            Prev
+        </Button>   
+        <Button Command="self:BeatNixCommands.PlayTrack" Grid.Row="2" Height="23" HorizontalAlignment="Center" Margin="0,0,0,5" 
+                Name="PlayPauseButton" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
+            Play
+        </Button>
+        <Button Command="self:BeatNixCommands.NextTrack" Grid.Row="2" Height="23" HorizontalAlignment="Center" Margin="160,0,0,5" 
+                Name="NextButton" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
+            Next
+        </Button>
+        <Button Command="self:BeatNixCommands.StopTrack" Grid.Row="2" Height="23" HorizontalAlignment="Center" Margin="320,0,0,5" 
+                Name="StopButton" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
+            Stop
+        </Button>
+        
+        <!-- Status Bar -->
+        <StatusBar Grid.Row="3" Grid.ColumnSpan="2" DockPanel.Dock="Bottom" MinHeight="15" MinWidth="700" Height="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Right" Background="Black">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"  />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="150"  />
+                </Grid.ColumnDefinitions>
+
+                <StatusBarItem>
+                    <TextBlock Name="playerStatusTextBlock" Style="{StaticResource StatusItem}">
+                        BeatNix Music Player
+                    </TextBlock>
+                </StatusBarItem>
+
+                <Separator Grid.Column="1">
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
+
+                <StatusBarItem Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                    <Rectangle MinWidth="4000" Width="Auto" Height="Auto" Margin="5" />  <!-- Used for Spacing-->
+                </StatusBarItem>
+                
+                <Separator Grid.Column="3">
+                    <Separator.LayoutTransform>
+                        <RotateTransform Angle="90" />
+                    </Separator.LayoutTransform>
+                </Separator>
+
+                <StatusBarItem Grid.Column="4" HorizontalContentAlignment="Right" VerticalAlignment="Bottom">
+                    <TextBlock Name="trackTimerTextBlock" Style="{StaticResource StatusTimer}" PreviewMouseDown="updateTimerMode">
+                        00:00
+                    </TextBlock>
+                </StatusBarItem>       
+            </Grid>
+        </StatusBar>
+    </Grid>
+</Window>
