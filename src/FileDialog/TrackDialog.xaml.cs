@@ -21,7 +21,6 @@ namespace BeatNixFileDialog {
         public String SelectedFile { set; get; }
         public String SelectedFolder { set; get; }
         FileFormat selectedFileType;
-
         public Boolean PlaylistMode { set; get; }
         public Boolean FolderMode { set; get; }
 
@@ -38,6 +37,10 @@ namespace BeatNixFileDialog {
             fileComboBox.ItemsSource = recentFiles();
 
             PlaylistMode = false;
+        }
+
+        public FileFormat FileType {
+            get { return selectedFileType; }
         }
 
         private List<IWshShortcut> recentFiles() {

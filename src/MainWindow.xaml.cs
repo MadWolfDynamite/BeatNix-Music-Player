@@ -43,17 +43,17 @@ namespace BeatNix {
 
             if (userTrack.DialogResult.Value) {
                     if (soundPlayer.GetType() == typeof(MusicPlayer)) { // Initial Startup
-                            if (userTrack.PlaylistMode || userTrack.FolderMode)
-                                soundPlayer = new MusicPlayer();
-                            else
-                                soundPlayer = new SingleTrack();
+                        playlistMode = userTrack.PlaylistMode;
 
-                            playlistMode = userTrack.PlaylistMode;
+                        if (userTrack.PlaylistMode || userTrack.FolderMode)
+                            soundPlayer = new Playlist();
+                        else
+                            soundPlayer = new SingleTrack();
 
-                            if (userTrack.FolderMode && playlistMode)
-                                soundPlayer.LoadTrack(userTrack.SelectedFolder);
-                            else
-                                soundPlayer.LoadTrack(userTrack.SelectedFile);
+                        if (userTrack.FolderMode)
+                            soundPlayer.LoadFolder(userTrack.SelectedFolder, userTrack.FileType);
+                        else
+                            soundPlayer.LoadTrack(userTrack.SelectedFile);
                     }
 
                     else if (soundPlayer.GetType() == typeof(SingleTrack)) { // Single Track Mode
@@ -68,11 +68,11 @@ namespace BeatNix {
                     else { // Playlist Mode
                     }
 
-                    if (autoCheckBox.IsChecked.Value && !soundPlayer.IsPlaying) {
+                    if (cb_AutoPlay.IsChecked.Value && !soundPlayer.IsPlaying) {
                         Play_Executed(sender, e as ExecutedRoutedEventArgs);
                     }
 
-                    TrackListBox.ItemsSource = soundPlayer.Tracklist();
+                    ls_Tracks.ItemsSource = soundPlayer.Tracklist();
             } // end of if(userTrack.DialogResult)
         } // end of Load_Executed
 
@@ -83,26 +83,26 @@ namespace BeatNix {
         private void Play_Executed(Object sender, ExecutedRoutedEventArgs e) {
             if (!soundPlayer.InProgress) {
                 updateCurrentlyPlaying(true);
-                TrackListBox.SelectedIndex = 0;
+                ls_Tracks.SelectedIndex = 0;
 
-                TrackSlider.IsEnabled = true;
+                sl_Seek.IsEnabled = true;
             }
 
             if (!soundPlayer.IsPlaying) {
-                soundPlayer.Play(RepeatCheckBox.IsChecked.Value);
-                PlayPauseButton.Content = "Pause";
+                soundPlayer.Play(cb_Repeat.IsChecked.Value);
+                bn_PlayPause.Content = "Pause";
 
-                if (soundPlayer.TrackDuration != TrackSlider.Maximum) 
-                    TrackSlider.Maximum = soundPlayer.TrackDuration;
+                if (soundPlayer.TrackDuration != sl_Seek.Maximum) 
+                    sl_Seek.Maximum = soundPlayer.TrackDuration;
 
-                playerStatusTextBlock.Text = "Playing";
+                tb_PlayerStatus.Text = "Playing";
                 trackTimer.Start();
             }
             else {
                 soundPlayer.Pause();
-                PlayPauseButton.Content = "Play";
+                bn_PlayPause.Content = "Play";
 
-                playerStatusTextBlock.Text = "Paused";
+                tb_PlayerStatus.Text = "Paused";
             }
         }
 
@@ -112,18 +112,18 @@ namespace BeatNix {
         }
         private void Stop_Executed(Object sender, ExecutedRoutedEventArgs e) {
             soundPlayer.Stop();
-            PlayPauseButton.Content = "Play";
+            bn_PlayPause.Content = "Play";
 
-            TrackListBox.SelectedIndex = -1;
+            ls_Tracks.SelectedIndex = -1;
             updateCurrentlyPlaying(false);
 
-            TrackSlider.IsEnabled = false;
-            TrackSlider.Value = 0;
+            sl_Seek.IsEnabled = false;
+            sl_Seek.Value = 0;
 
-            playerStatusTextBlock.Text = "BeatNix Music Player";
+            tb_PlayerStatus.Text = "BeatNix Music Player";
             trackTimer.Stop();
 
-            TrackListBox.ItemsSource = soundPlayer.Tracklist();
+            ls_Tracks.ItemsSource = soundPlayer.Tracklist();
         }
 
         // Event Handers for previous track
@@ -131,25 +131,25 @@ namespace BeatNix {
             e.CanExecute = soundPlayer.InProgress || soundPlayer.GetType().Equals(typeof(MusicPlayer));
         }
         private void Prev_Executed(Object sender, ExecutedRoutedEventArgs e) {
-            soundPlayer.PrevTrack(RepeatCheckBox.IsChecked.Value);
+            soundPlayer.PrevTrack(cb_Repeat.IsChecked.Value);
 
-            if (soundPlayer.TrackDuration != TrackSlider.Maximum)
-                TrackSlider.Maximum = soundPlayer.TrackDuration;
+            if (soundPlayer.TrackDuration != sl_Seek.Maximum)
+                sl_Seek.Maximum = soundPlayer.TrackDuration;
 
-            TrackListBox.ItemsSource = soundPlayer.Tracklist();
+            ls_Tracks.ItemsSource = soundPlayer.Tracklist();
         }
 
         // Event Handlers for skipping to next track
         private void Next_CanExecute(Object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = TrackListBox.Items.Count > 1;
+            e.CanExecute = ls_Tracks.Items.Count > 1;
         }
         private void Next_Executed(Object sender, ExecutedRoutedEventArgs e) {
-            soundPlayer.SkipTrack(RepeatCheckBox.IsChecked.Value);
+            soundPlayer.SkipTrack(cb_Repeat.IsChecked.Value);
 
-            if (soundPlayer.TrackDuration != TrackSlider.Maximum)
-                TrackSlider.Maximum = soundPlayer.TrackDuration;
+            if (soundPlayer.TrackDuration != sl_Seek.Maximum)
+                sl_Seek.Maximum = soundPlayer.TrackDuration;
 
-            TrackListBox.ItemsSource = soundPlayer.Tracklist();
+            ls_Tracks.ItemsSource = soundPlayer.Tracklist();
             updateCurrentlyPlaying(true);
         }
 
@@ -174,22 +174,22 @@ namespace BeatNix {
                 String[] trackInfo = soundPlayer.TrackDetails();
                 albumArtImage.Source = soundPlayer.AlbumArt();
 
-                titleTextBlock.Text = trackInfo[0]; // Track Title
-                artistTextBlock.Text = trackInfo[1]; // Track Artist
-                albumTextBlock.Text = trackInfo[2]; // Track Album
+                tb_Title.Text = trackInfo[0]; // Track Title
+                tb_Artist.Text = trackInfo[1]; // Track Artist
+                tb_Album.Text = trackInfo[2]; // Track Album
 
-                yearTextBlock.Text = trackInfo[3]; // Track Year
-                bitrateTextBlock.Text = String.Format("{0}kb/s", trackInfo[4]); // Track Bitrate
-                formatTextBlock.Text = trackInfo[5]; // Track Filetype (.mp3 /.ogg / etc.)
+                tb_Year.Text = trackInfo[3]; // Track Year
+                tb_Bitrate.Text = String.Format("{0}kb/s", trackInfo[4]); // Track Bitrate
+                tb_Format.Text = trackInfo[5]; // Track Filetype (.mp3 /.ogg / etc.)
 
-                locationTextBlock.Text = trackInfo[6]; // Track Location (what is used by the class itself)
+                tb_Location.Text = trackInfo[6]; // Track Location (what is used by the class itself)
 
-                titleLabel.IsEnabled = true;
+                lb_Title.IsEnabled = true;
 
-                bitrateLabel.IsEnabled = true;
-                formatLabel.IsEnabled = true;
+                lb_Bitrate.IsEnabled = true;
+                lb_Format.IsEnabled = true;
 
-                locationLabel.IsEnabled = true;
+                lb_Location.IsEnabled = true;
                 
                 // Checks for empty values (Title, Bitrate, Filetype and Location will always have a value)
                 if (albumArtImage.Source == null) {
@@ -198,22 +198,22 @@ namespace BeatNix {
                 }
 
                 if (trackInfo[1] != null)
-                    artistLabel.IsEnabled = true;
+                    lb_Artist.IsEnabled = true;
                 else
-                    artistLabel.IsEnabled = false;
+                    lb_Artist.IsEnabled = false;
 
                 if (trackInfo[2] != null)
-                    albumLabel.IsEnabled = true;
+                    lb_Album.IsEnabled = true;
                 else
-                    albumLabel.IsEnabled = false;
+                    lb_Album.IsEnabled = false;
 
                 if (Convert.ToInt32(trackInfo[3]) != 0) {
-                    yearLabel.IsEnabled = true;
-                    yearTextBlock.Visibility = Visibility.Visible;
+                    lb_Year.IsEnabled = true;
+                    tb_Year.Visibility = Visibility.Visible;
                 }
                 else {
-                    yearLabel.IsEnabled = false;
-                    yearTextBlock.Visibility = Visibility.Hidden;
+                    lb_Year.IsEnabled = false;
+                    tb_Year.Visibility = Visibility.Hidden;
                 }
 
                 detailsEnabled.IsChecked = true;
@@ -223,15 +223,15 @@ namespace BeatNix {
                 Uri defaultImage = new Uri(Environment.CurrentDirectory + "/Images/Placeholder.png");
                 albumArtImage.Source = new BitmapImage(defaultImage);
 
-                titleLabel.IsEnabled = false;
-                artistLabel.IsEnabled = false;
-                albumLabel.IsEnabled = false;
+                lb_Title.IsEnabled = false;
+                lb_Artist.IsEnabled = false;
+                lb_Album.IsEnabled = false;
 
-                yearLabel.IsEnabled = false;
-                bitrateLabel.IsEnabled = false;
-                formatLabel.IsEnabled = false;
+                lb_Year.IsEnabled = false;
+                lb_Bitrate.IsEnabled = false;
+                lb_Format.IsEnabled = false;
 
-                locationLabel.IsEnabled = false;
+                lb_Location.IsEnabled = false;
 
                 detailsEnabled.IsChecked = false;
             } // end of else statement
@@ -240,18 +240,18 @@ namespace BeatNix {
         // Updates time elasped (or remaning) on track
         private void updateTrackTime(Object sender, EventArgs e) {
             if (!isCurrentlySeeking) {
-                trackTimerTextBlock.Text = soundPlayer.TrackPosition(timerMode);
-                TrackSlider.Value = soundPlayer.TrackPositionRaw;
+                tb_TrackTime.Text = soundPlayer.TrackPosition(timerMode);
+                sl_Seek.Value = soundPlayer.TrackPositionRaw;
 
-                if ((soundPlayer.HasEnded() && !isCurrentlySeeking) && RepeatCheckBox.IsChecked.Value == false) {
-                    if (autoCheckBox.IsChecked.Value && TrackListBox.Items.Count > 1) //Auto Plays next preloaded track
+                if ((soundPlayer.HasEnded() && !isCurrentlySeeking) && cb_Repeat.IsChecked.Value == false) {
+                    if (cb_AutoPlay.IsChecked.Value && ls_Tracks.Items.Count > 1) //Auto Plays next preloaded track
                         Next_Executed(sender, e as ExecutedRoutedEventArgs);
                     else
                         Stop_Executed(sender, e as ExecutedRoutedEventArgs);
                 }
             }
             else {
-                int seekSecond = Convert.ToInt32(TrackSlider.Value / 1000);
+                int seekSecond = Convert.ToInt32(sl_Seek.Value / 1000);
                 int seekMinute = seekSecond / 60;
                 seekSecond %= 60;
 
@@ -268,9 +268,9 @@ namespace BeatNix {
                     result = seekHour.ToString() + ":";
 
                 result += seekMinute.ToString("00") + ":" + seekSecond.ToString("00");
-                double percentage = (TrackSlider.Value / soundPlayer.TrackDuration) * 100;
+                double percentage = (sl_Seek.Value / soundPlayer.TrackDuration) * 100;
 
-                trackTimerTextBlock.Text = String.Format("Seek {0} / {1} ({2}%)", result, soundPlayer.TrackDurationFormatted(), Math.Round(percentage));
+                tb_TrackTime.Text = String.Format("Seek {0} / {1} ({2}%)", result, soundPlayer.TrackDurationFormatted(), Math.Round(percentage));
             } 
         }
 
@@ -279,8 +279,8 @@ namespace BeatNix {
             isCurrentlySeeking = true;
         }
         private void seekTrack(object sender, MouseButtonEventArgs e) {
-            soundPlayer.SeekTrack(TrackSlider.Value, RepeatCheckBox.IsChecked.Value);
-            trackTimerTextBlock.Text = soundPlayer.TrackPosition(timerMode);
+            soundPlayer.SeekTrack(sl_Seek.Value, cb_Repeat.IsChecked.Value);
+            tb_TrackTime.Text = soundPlayer.TrackPosition(timerMode);
 
             isCurrentlySeeking = false;
         }
@@ -288,7 +288,7 @@ namespace BeatNix {
         // Changes the state of the repeat function
         private void updateRepeatStatus(object sender, RoutedEventArgs e) {
             if (soundPlayer.IsPlaying)
-                soundPlayer.Play(RepeatCheckBox.IsChecked.Value);
+                soundPlayer.Play(cb_Repeat.IsChecked.Value);
         }
 
     }

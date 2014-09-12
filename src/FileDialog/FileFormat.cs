@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace BeatNixFileDialog {
-    class FileFormat {
+    public class FileFormat {
         public List<FileFormat> FileList { get; set; }
 
         String extensionName;
@@ -23,7 +23,10 @@ namespace BeatNixFileDialog {
                         "Ogg Vorbis (.ogg)|.ogg|.OGG",
                         "Windows Media Audio (.wma)|.wma|.WMA",
                         "Waveform Audio (.wav)|.wav|.WAV",
-                        "Free Lossless Audio Codec (.flac)|.flac|.Flac" };
+                        "Free Lossless Audio Codec (.flac)|.flac|.FLAC",
+                        "Monkeys Audio (.ape)|.ape|.APE",
+                        "MPEG-4 Audio (.m4a)|.m4a|.M4A",
+                        "Audio CD (.cda)|.cda|.CDA"};
 
                     foreach (String fileType in compatibleFiles) {
                         String[] result = fileType.Split('|');

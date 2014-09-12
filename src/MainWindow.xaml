@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:self="clr-namespace:BeatNix"
-        Title="BeatNix Music Player V0.3.0" MinHeight="390" MinWidth="750" Height="385" Width="385" Background="WhiteSmoke">
+        Title="BeatNix Music Player V0.4.0" MinHeight="390" MinWidth="750" Height="385" Width="385" Background="WhiteSmoke">
     
     <!-- Player Commands -->
     <Window.CommandBindings>
@@ -132,80 +132,81 @@
         <CheckBox Content="CheckBox" Height="16" HorizontalAlignment="Right" Margin="0,10,3,0" Name="detailsEnabled" VerticalAlignment="Top" Visibility="Hidden" /> <!-- For Fading Animation-->
         <Image Name="albumArtImage" Width="128" Height="128" Margin="10,10,10,0" HorizontalAlignment="Left" VerticalAlignment="Top" Source="Images/Placeholder.png" />
 
-        <Label Content="Title" Height="Auto" HorizontalAlignment="Left" Margin="140,10,0,0" Name="titleLabel" VerticalAlignment="Top" />
-        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="140,35,0,0" Name="titleTextBlock" VerticalAlignment="Top" MinWidth="377">
+        <Label Content="Title" Height="Auto" HorizontalAlignment="Left" Margin="140,10,0,0" Name="lb_Title" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="140,35,0,0" Name="tb_Title" VerticalAlignment="Top" MinWidth="377">
             Track Title
         </TextBlock>
 
-        <Label Content="Artist" Height="Auto" HorizontalAlignment="Left" Margin="140,55,0,0" Name="artistLabel" VerticalAlignment="Top" />
-        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="140,80,0,0" Name="artistTextBlock" VerticalAlignment="Top" MinWidth="377">
+        <Label Content="Artist" Height="Auto" HorizontalAlignment="Left" Margin="140,55,0,0" Name="lb_Artist" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="140,80,0,0" Name="tb_Artist" VerticalAlignment="Top" MinWidth="377">
             Track Aritst
         </TextBlock>
 
-        <Label Content="Album" Height="Auto" HorizontalAlignment="Left" Margin="140,100,0,0" Name="albumLabel" VerticalAlignment="Top" />
-        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="140,125,0,0" Name="albumTextBlock" VerticalAlignment="Top" MinWidth="377">
+        <Label Content="Album" Height="Auto" HorizontalAlignment="Left" Margin="140,100,0,0" Name="lb_Album" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="140,125,0,0" Name="tb_Album" VerticalAlignment="Top" MinWidth="377">
             Track Album
         </TextBlock>
 
-        <Label Content="Year" Height="Auto" HorizontalAlignment="Left" Margin="5,145,0,95" Name="yearLabel" VerticalAlignment="Top" />
-        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="5,170,0,85" Name="yearTextBlock" VerticalAlignment="Top" MinWidth="10">
+        <Label Content="Year" Height="Auto" HorizontalAlignment="Left" Margin="5,145,0,95" Name="lb_Year" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Left" Margin="5,170,0,85" Name="tb_Year" VerticalAlignment="Top" MinWidth="10">
             2014
         </TextBlock>
 
-        <Label Content="Bitrate" Height="Auto" HorizontalAlignment="Center" Margin="-160,145,0,95" Name="bitrateLabel" VerticalAlignment="Top" />
-        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Center" Margin="-170,170,0,85" Name="bitrateTextBlock" VerticalAlignment="Top" MinWidth="10">
+        <Label Content="Bitrate" Height="Auto" HorizontalAlignment="Center" Margin="-160,145,0,95" Name="lb_Bitrate" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Center" Margin="-170,170,0,85" Name="tb_Bitrate" VerticalAlignment="Top" MinWidth="10">
             192kbps
         </TextBlock>
 
-        <Label Content="Format" Height="Auto" HorizontalAlignment="Right" Margin="0,145,165,95" Name="formatLabel" VerticalAlignment="Top" />
-        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Right" Margin="0,170,40,0" Name="formatTextBlock" VerticalAlignment="Top" 
+        <Label Content="Format" Height="Auto" HorizontalAlignment="Right" Margin="0,145,165,95" Name="lb_Format" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Right" Margin="0,170,40,0" Name="tb_Format" VerticalAlignment="Top" 
                    MinWidth="210" MaxWidth="250">
             Vorbis Verson 0 Audio
         </TextBlock>
 
-        <Label Content="File Location" Height="Auto" HorizontalAlignment="Left" Margin="5,190,0,50" Name="locationLabel" VerticalAlignment="Top" />
-        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="4,215,3,5" Name="locationTextBlock" VerticalAlignment="Stretch" 
+        <Label Content="File Location" Height="Auto" HorizontalAlignment="Left" Margin="5,190,0,50" Name="lb_Location" VerticalAlignment="Top" />
+        <TextBlock Height="Auto" Width="Auto" HorizontalAlignment="Stretch" Margin="4,215,3,5" Name="tb_Location" VerticalAlignment="Stretch" 
                    MinWidth="377" TextWrapping="Wrap">
             Track Location
         </TextBlock>
 
         <!-- Preloaded Tracklist -->
-        <CheckBox Content="Auto Play" Grid.Column="1" Height="16" HorizontalAlignment="Left" Margin="10,20,0,0" Name="autoCheckBox" VerticalAlignment="Top" />
+        <CheckBox Content="Auto Play" Grid.Column="1" Height="16" HorizontalAlignment="Left" Margin="10,20,0,0" Name="cb_AutoPlay" VerticalAlignment="Top" />
         
         <Button Grid.Column="1" Height="23" Width="23" HorizontalAlignment="Right" VerticalAlignment="Top" 
-                Margin="0,10,10,0" Name="BrowseButton" Command="self:BeatNixCommands.LoadTrack">
+                Margin="0,10,10,0" Name="bn_Browse" Command="self:BeatNixCommands.LoadTrack">
             ...
         </Button>
 
-        <Separator Grid.Column="1" Height="Auto" MaxHeight="1" HorizontalAlignment="Stretch" Margin="10,45,10,0" Name="trackSeparator" VerticalAlignment="Top" 
+        <Separator Grid.Column="1" Height="Auto" MaxHeight="1" HorizontalAlignment="Stretch" Margin="10,45,10,0" Name="sp_Playlist" VerticalAlignment="Top" 
                    Width="Auto" MinWidth="190" />
 
         <ListBox Grid.Column="1" Height="Auto" Width="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top" 
-                 Margin="10,47.5,10,0" Name="TrackListBox" MinHeight="220" MinWidth="190"
+                 Margin="10,47.5,10,0" Name="ls_Tracks" MinHeight="220" MinWidth="190"
                  Background="WhiteSmoke" BorderThickness="0" />
         
         <!-- Track Slider -->
-        <Slider Name="TrackSlider" Grid.Row="1" Grid.ColumnSpan="2" Height="20" MinWidth="10" Margin="10,0,10,0"
+        <Slider Name="sl_Seek" Grid.Row="1" Grid.ColumnSpan="2" Height="20" MinWidth="10" Margin="10,0,10,0"
                 VerticalAlignment="Bottom" IsEnabled="False" Minimum="0" PreviewMouseLeftButtonUp="seekTrack" PreviewMouseLeftButtonDown="updateSeekingStatus" />
         
         <!-- Repeat Checkbox -->
-        <CheckBox Content="Repeat Track" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="10,0,0,5" Name="RepeatCheckBox" VerticalAlignment="Bottom" Checked="updateRepeatStatus" Unchecked="updateRepeatStatus" />
+        <CheckBox Content="Repeat Track" Grid.Row="2" Height="16" HorizontalAlignment="Left" Margin="10,0,0,5" Name="cb_Repeat" 
+                  VerticalAlignment="Bottom" Checked="updateRepeatStatus" Unchecked="updateRepeatStatus" />
 
         <!-- Media Buttons -->
         <Button Command="self:BeatNixCommands.PrevTrack" Grid.Row="2" Height="23" HorizontalAlignment="Center" Margin="-160,0,0,5" 
-                Name="PrevButton" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
+                Name="bn_Prev" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
             Prev
         </Button>   
         <Button Command="self:BeatNixCommands.PlayTrack" Grid.Row="2" Height="23" HorizontalAlignment="Center" Margin="0,0,0,5" 
-                Name="PlayPauseButton" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
+                Name="bn_PlayPause" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
             Play
         </Button>
         <Button Command="self:BeatNixCommands.NextTrack" Grid.Row="2" Height="23" HorizontalAlignment="Center" Margin="160,0,0,5" 
-                Name="NextButton" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
+                Name="bn_Next" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
             Next
         </Button>
         <Button Command="self:BeatNixCommands.StopTrack" Grid.Row="2" Height="23" HorizontalAlignment="Center" Margin="320,0,0,5" 
-                Name="StopButton" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
+                Name="bn_Stop" VerticalAlignment="Bottom" Width="75" Grid.ColumnSpan="2">
             Stop
         </Button>
         
@@ -221,7 +222,7 @@
                 </Grid.ColumnDefinitions>
 
                 <StatusBarItem>
-                    <TextBlock Name="playerStatusTextBlock" Style="{StaticResource StatusItem}">
+                    <TextBlock Name="tb_PlayerStatus" Style="{StaticResource StatusItem}">
                         BeatNix Music Player
                     </TextBlock>
                 </StatusBarItem>
@@ -243,7 +244,7 @@
                 </Separator>
 
                 <StatusBarItem Grid.Column="4" HorizontalContentAlignment="Right" VerticalAlignment="Bottom">
-                    <TextBlock Name="trackTimerTextBlock" Style="{StaticResource StatusTimer}" PreviewMouseDown="updateTimerMode">
+                    <TextBlock Name="tb_TrackTime" Style="{StaticResource StatusTimer}" PreviewMouseDown="updateTimerMode">
                         00:00
                     </TextBlock>
                 </StatusBarItem>       

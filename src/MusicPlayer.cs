@@ -221,6 +221,10 @@ namespace BeatNix {
         public virtual void LoadTrack(String fileLocation) { //Do Nothing
         }
 
+        //Loading folders of tracks into Player API
+        public virtual void LoadFolder(String fileLocation, BeatNixFileDialog.FileFormat fileType) { //Do Nothing
+        }
+
         //Returns the ID3 Tags of the loaded track (useful for stopped tracks)
         public virtual String[] TrackDetails() {
             String[] result = { "You've done something wrong :P", "", "", "", "" };

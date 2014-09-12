@@ -40,7 +40,7 @@ namespace BeatNix {
         //Returns the ID3 Tags of the loaded track (useful for stopped tracks)
         public override String[] TrackDetails() {
             String trackTitle;
-            String[] seperators = { "\\", ".mp3", ".ogg", ".wma", ".wav", ".flac" }; //For Songs with no Title Tag
+            String[] seperators = { "\\", ".mp3", ".ogg", ".wma", ".wav", ".flac", ".ape", "m4a", "cda" }; //For Songs with no Title Tag
 
             TagLib.File track = TagLib.File.Create(preloadedTrack);
             if (track.Tag.Title == null) {
@@ -98,7 +98,7 @@ namespace BeatNix {
 
             if (!currentTrack.Equals("") && !currentTrack.Equals(preloadedTrack)) {
                 String songTitle;
-                String[] seperators = { "\\", ".mp3", ".ogg", ".wma", ".wav", ".flac" }; //For Songs with no Title Tag
+                String[] seperators = { "\\", ".mp3", ".ogg", ".wma", ".wav", ".flac", ".ape", "m4a", "cda" }; //For Songs with no Title Tag
 
                 TagLib.File track = TagLib.File.Create(currentTrack);
                 if (track.Tag.Title == null) {
