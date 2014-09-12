@@ -23,7 +23,8 @@ namespace BeatNix {
             BeatNixFileDialog.FileFormat compatableFiles = new BeatNixFileDialog.FileFormat("Music");
 
             foreach (var fileType in compatableFiles.FileList) {
-                if (track.Contains(fileType.ExtensionLower) || track.Contains(fileType.ExtensionUpper))
+                if ((track.Contains(fileType.ExtensionLower) || track.Contains(fileType.ExtensionUpper)) 
+                    && !trackList.Contains(track))
                     trackList.AddLast(track);
             }
 
@@ -64,8 +65,10 @@ namespace BeatNix {
                 mciSendString(playerCommand, null, 0, IntPtr.Zero);
             }
 
-            trackList.AddLast(fileLocation);
-            playlistSize++;
+            if (!trackList.Contains(fileLocation)) {
+                trackList.AddLast(fileLocation);
+                playlistSize++;
+            }
 
             playerCommand = String.Format(baseCommand, trackList.ElementAt(nextTrack));
             mciSendString(playerCommand, null, 0, IntPtr.Zero);
@@ -86,7 +89,8 @@ namespace BeatNix {
             foreach (var track in dirInfo.GetFiles()) {
                 if (fileType.ExtensionLower.Equals(".*"))
                    validateTrack(track.FullName);
-                else if (track.Name.Contains(fileType.ExtensionLower) || track.Name.Contains(fileType.ExtensionUpper))
+                else if ((track.Name.Contains(fileType.ExtensionLower) || track.Name.Contains(fileType.ExtensionUpper)) 
+                    && !trackList.Contains(track.FullName))
                     trackList.AddLast(track.FullName);
             }
 
@@ -160,6 +164,82 @@ namespace BeatNix {
                 result.AddLast(trackDetails(track));
 
             return result;
+        }
+
+        //Checks for loaded track, then plays it (Also repeats if necessary)
+        public override Boolean Play(Boolean repeatMode) {
+            if (!fileActive)
+                return false;
+
+            if (!inProgress) {
+                trackLength(trackList.ElementAt(nextTrack));
+
+                currentTrack = nextTrack;
+                nextTrack++;
+
+                if (nextTrack == playlistSize)
+                    nextTrack = 0;
+            }
+
+            String playerCommand = "Play MediaFile";
+            if (repeatMode) //Adds repeat Functionality
+                playerCommand += " REPEAT";
+
+            mciSendString(playerCommand, null, 0, IntPtr.Zero);
+
+            isPlaying = true;
+            inProgress = true;
+
+            return true;
+        }
+
+        //Pauses the current track in it's current position
+        public override void Pause() {
+            String playerCommand = "Stop MediaFile"; //Actually pauses the file...
+            mciSendString(playerCommand, null, 0, IntPtr.Zero);
+
+            isPlaying = false;
+        }
+
+        //Stops Current Track
+        public override void Stop() {
+            String playerCommand = "Stop MediaFile";
+            mciSendString(playerCommand, null, 0, IntPtr.Zero);
+
+            isPlaying = false;
+            inProgress = false;
+
+            nextTrack = currentTrack;
+            LoadTrack(trackList.ElementAt(nextTrack));
+        }
+
+        //Jumps to previous track (or restarts current track)
+        public override void PrevTrack(bool repeatMode) {
+            if (pastCutoffTime() && isPlaying) {
+                Stop();
+
+                isPlaying = true;
+            }
+            else if (isPlaying) {
+                Stop();
+                nextTrack--;
+
+                if (nextTrack < 0)
+                    nextTrack = 0;
+
+                isPlaying = true;
+            }
+            else {
+                Stop();
+                nextTrack--;
+
+                if (nextTrack < 0)
+                    nextTrack = 0;
+            }
+
+            LoadTrack(trackList.ElementAt(nextTrack));
+            if (isPlaying)
+                Play(repeatMode);
         }
 
         /*/////////////////////////////////////////////////////

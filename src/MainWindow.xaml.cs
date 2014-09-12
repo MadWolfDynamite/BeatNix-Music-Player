@@ -128,7 +128,7 @@ namespace BeatNix {
 
         // Event Handers for previous track
         private void Prev_CanExecute(Object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = soundPlayer.InProgress || soundPlayer.GetType().Equals(typeof(MusicPlayer));
+            e.CanExecute = soundPlayer.InProgress || soundPlayer.GetType().Equals(typeof(Playlist));
         }
         private void Prev_Executed(Object sender, ExecutedRoutedEventArgs e) {
             soundPlayer.PrevTrack(cb_Repeat.IsChecked.Value);
